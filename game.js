@@ -34,7 +34,7 @@ function LittleBoard(x, y) {
     }
 }
 
-// globals for convenience
+//Globals for convenience
 var canvas;
 var ctx;
 var padding;
@@ -54,6 +54,8 @@ function init() {
 
     player = 1;
     updateStatus('Connecting to server...');
+
+    //Socket.io functions to handle communication with the server
     iosocket = io.connect();
 
     iosocket.on('connect', function() {
@@ -101,7 +103,7 @@ function init() {
         });
     });
     
-
+    //Adjust window size if browser size changes
     window.addEventListener('resize', resizeGame, false);
     resizeGame();
 
@@ -112,18 +114,18 @@ function updateStatus(msg) {
     statusDiv.innerText = status;
 }
 
-// Resize the canvas to fit in the window
+//Resize the canvas to fit in the window
 function resizeGame() {
     canvas.width = Math.min(window.innerWidth, window.innerHeight) - 50;
     canvas.height = canvas.width;
-    padding = canvas.height/25; // inner padding for each little board
+    padding = canvas.height/25; //Inner padding for each little board
     drawBoard();
 }
 
-// Event handler for clicks
+//Event handler for clicks
 function clicky(e) {
 
-    // We only want to handle clicks if it is currently our turn
+    //We only want to handle clicks if it is currently our turn
     if ( theGame.turn != player ) {
         return;
     }
@@ -133,21 +135,21 @@ function clicky(e) {
 
     var oneThird = canvas.width/3;
 
-    // Figure out which little board was clicked on
+    //Figure out which little board was clicked on
     var xBoard = Math.floor(xCoord/oneThird);
     var yBoard = Math.floor(yCoord/oneThird);
 
-    // Figure out which location on little board was clicked on
-    // **************************************************
-    // Fix me! Add padding to calculations!
+    //Figure out which location on little board was clicked on
+    //**************************************************
+    //Fix me! Add padding to calculations!
     var xLoc = Math.floor(3 * (xCoord - xBoard * oneThird) / oneThird);
     var yLoc = Math.floor(3 * (yCoord - yBoard * oneThird) / oneThird);
 
-    // Check to see if turn is in the right board
+    //Check to see if turn is in the right board
     if ((xBoard == theGame.activeX && yBoard == theGame.activeY) || (theGame.activeX == -1)) {
-    // Check to see if the turn is in an empty pace
+    //Check to see if the turn is in an empty pace
         if (theGame.boards[xBoard][yBoard].state[xLoc][yLoc] == 0) {
-            // Send move to server to be checked
+            //Send move to server to be checked
             executeMove(xBoard, yBoard, xLoc, yLoc);
         }
     }
@@ -155,29 +157,27 @@ function clicky(e) {
 }
 
 function executeMove(xBoard, yBoard, xLoc, yLoc) {
-    // Send move to server
+    //Send move to server
     iosocket.emit('move', {xBoard: xBoard, yBoard: yBoard, xLoc: xLoc, yLoc: yLoc});
-    // Get update from server
-
-
+    //Get update from server
     drawBoard();
 }
 
 function drawBigBoard() {
     var oneThird = canvas.width/3;
 
-    // Thick black lines
+    //Thick black lines
     ctx.strokeStyle = '#000000';
     ctx.lineWidth = 5;
     ctx.beginPath();
 
-    // Draw horizontal lines
+    //Draw horizontal lines
     ctx.moveTo(0, oneThird);
     ctx.lineTo(canvas.width, oneThird);
     ctx.moveTo(0, 2*oneThird);
     ctx.lineTo(canvas.width, 2*oneThird);
 
-    // Draw vertical lines
+    //Draw vertical lines
     ctx.moveTo(oneThird, 0);
     ctx.lineTo(oneThird, canvas.width);
     ctx.moveTo(2*oneThird, 0);
@@ -198,13 +198,13 @@ function drawLittleBoard(x, y) {
 
     var lbState = theGame.boards[x][y].state;
 
-    // Highlight the active board
+    //Highlight the active board
     if (x == theGame.activeX && y == theGame.activeY) {
         ctx.fillStyle='Khaki';
         ctx.fillRect(xOffset+padding/2, yOffset+padding/2, oneThird-padding, oneThird-padding);
     }
 
-    // Highlight won boards
+    //Highlight won boards
     if (theGame.boards[x][y].won) {
         if (theGame.boards[x][y].winner == 1) {
             ctx.fillStyle ='LightSalmon';
@@ -215,11 +215,11 @@ function drawLittleBoard(x, y) {
         ctx.fillRect(xOffset+padding/2, yOffset+padding/2, oneThird-padding, oneThird-padding);
     }
 
-    // Draw the Xs and Os
+    //Draw the Xs and Os
     for ( var i=0; i<3; i++ ) {
         for ( var j=0; j<3; j++ ) {
             if ( lbState[i][j] == 1 ) {
-                // Draw a red X
+                //Draw a red X
                 ctx.strokeStyle = '#ff0000'
                 ctx.lineWidth = 5;
                 ctx.beginPath();
@@ -232,7 +232,7 @@ function drawLittleBoard(x, y) {
                 ctx.stroke();
                 ctx.closePath();
             } else if ( lbState[i][j] == 2 ) {
-                // Draw a blue O
+                //Draw a blue O
                 ctx.strokeStyle = '#0000ff'
                 ctx.lineWidth = 5;
                 ctx.beginPath();
@@ -247,18 +247,18 @@ function drawLittleBoard(x, y) {
     }
 
 
-    // Thin black lines
+    //Thin black lines
     ctx.strokeStyle = '#000000';
     ctx.lineWidth = 2;
     ctx.beginPath();
 
-    // Draw horizontal lines
+    //Draw horizontal lines
     ctx.moveTo(xOffset + padding, yOffset + padding + oneNinth);
     ctx.lineTo(xOffset + oneThird - padding, yOffset + padding + oneNinth);
     ctx.moveTo(xOffset + padding, yOffset + padding + 2*oneNinth);
     ctx.lineTo(xOffset + oneThird - padding, yOffset + padding + 2*oneNinth);
 
-    // Draw vertical lines
+    //Draw vertical lines
     ctx.moveTo(xOffset + padding + oneNinth, yOffset + padding);
     ctx.lineTo(xOffset + padding + oneNinth, yOffset + oneThird - padding);
     ctx.moveTo(xOffset + padding + 2*oneNinth, yOffset + padding);
