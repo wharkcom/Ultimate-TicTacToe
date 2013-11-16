@@ -1,9 +1,12 @@
+//Set up express, http server, and socket.io
 var app = require('express') ()
     , server = require('http').createServer(app)
     , io = require('socket.io').listen(server);
 
+//Listening on port 8080, open at URL:8080
 server.listen(8080);
 
+//Send webpage and game script to the user
 app.get('/', function (req, res) {
   res.sendfile(__dirname + '/client.html');
 });
@@ -14,16 +17,19 @@ app.get('/game.js', function (req, res) {
 
 var numPlayers = 0;
 var theGame;
- 
+
+//Socket.io to handle communication with the browser
 io.sockets.on('connection', function (socket) {
     socket.on('message', function (msg) {
         console.log('Message Received: ', msg);
         socket.broadcast.emit('message', msg);
     });
 
-    numPlayers++;
+    //Every time someone connects, increment the player number
+    numPlayers++; 
     console.log('Player Connected');
 
+    //Assign players based on the order they connected.
     if( numPlayers == 1) {
    		socket.emit('setPlayer1');
    		socket.set('nickname', 'Player1');
@@ -32,7 +38,8 @@ io.sockets.on('connection', function (socket) {
     	socket.set('nickname', 'Player2');
     	startGame();
     } else {
-    	socket.emit('message', 'There are too many players!');
+        //Only handles 2 players -- Add a lobby or something later!
+    	socket.emit('message', 'There are too many players!'); 
     };
 
     socket.on('move', function(move) {
@@ -46,8 +53,10 @@ io.sockets.on('connection', function (socket) {
     });
 });
 
+//Amount of detail server outputs to logger
 io.set('log level', 1);
 
+//Executes once two players join
 function startGame() {
 	theGame = new GameState();
 	theGame.turn = 1;
@@ -58,20 +67,20 @@ function GameState() {
     this.boards = new Array(3);
     this.turn = 0;
 
-    for ( var i=0; i<3; i++ ) {
+    for ( var f=0; i<3; i++ ) {
         this.boards[i] = new Array(3);
         for ( var j=0; j<3; j++ ) {
             this.boards[i][j] = new LittleBoard(i, j);
         }
     }
-
+    //Nothing active at the start
     this.activeX = -1;
     this.activeY = -1;
 }
 
-// LittleBoard 'class'
+//LittleBoard 'class'
 function LittleBoard(x, y) {
-    // x and y this board
+    //x and y this board
     this.x = x;
     this.y = y;
     this.state = new Array(3);
@@ -79,7 +88,7 @@ function LittleBoard(x, y) {
     this.won = false;
     this.winner = 0;
 
-    // initialize states to zero
+    //Initialize states to zero -- Used to determine if square is X or O
     for ( var i=0; i<3; i++ ) {
         this.state[i] = new Array(3);
         for ( var j=0; j<3; j++ ) {
@@ -93,8 +102,9 @@ function executeMove(xBoard, yBoard, xLoc, yLoc) {
     var lbState = theGame.boards[xBoard][yBoard].state;
     var mark = theGame.turn;
 
-    lbState[xLoc][yLoc] = mark;
+    lbState[xLoc][yLoc] = mark; //Adds an X or O to the selected square
 
+    //Check to see if anyone wins after each move
     checkLittleWin(xBoard, yBoard, xLoc, yLoc, mark);
 
     if (theGame.boards[xLoc][yLoc].won) {
@@ -105,23 +115,25 @@ function executeMove(xBoard, yBoard, xLoc, yLoc) {
         theGame.activeY = yLoc;
     }
 
+    //Display the move for the clients
     io.sockets.emit('move', {xBoard: xBoard, yBoard: yBoard, xLoc: xLoc, yLoc: yLoc, mark: mark});
 
-    // Update clients with move
+    //Update clients with move
 	if (theGame.turn == 1) {
 		theGame.turn = 2;
 	} else {
 		theGame.turn = 1;
 	}
+    //Update player turn for clients
 	io.sockets.emit('newTurn', {turn: theGame.turn, activeX: theGame.activeX, activeY: theGame.activeY});
 }
 
-// Check for a little win
+//Check for a little win
 function checkLittleWin(xBoard, yBoard, xLoc, yLoc, mark){
     
     var lbState = theGame.boards[xBoard][yBoard].state;
    
-    // Check row
+    //Check row
     var rowWin = true;
     for (var i = 0; i<3; i++) {
         if (lbState[xLoc][i] != mark) {
@@ -129,7 +141,7 @@ function checkLittleWin(xBoard, yBoard, xLoc, yLoc, mark){
             break;
         }
     }
-    // Check column
+    //Check column
     var colWin = true;
     for (var i = 0; i<3; i++) {
         if (lbState[i][yLoc] != mark) {
@@ -138,7 +150,7 @@ function checkLittleWin(xBoard, yBoard, xLoc, yLoc, mark){
         }
     }
 
-    // Check Diags
+    //Check Diags
     var diagWin = false;
     if (lbState[0][0] == mark && lbState[1][1] == mark && lbState[2][2] == mark) {
         diagWin = true;
@@ -147,18 +159,19 @@ function checkLittleWin(xBoard, yBoard, xLoc, yLoc, mark){
         diagWin = true;
     }
 
-    // Winner?
+    //Winner?
     if (diagWin || colWin || rowWin){
         theGame.boards[xBoard][yBoard].won = true;
         theGame.boards[xBoard][yBoard].winner = mark;
 
         io.sockets.emit('littleWin', {xBoard: xBoard, yBoard: yBoard, winner: mark});
 
+        //Every time someone wins a little board, check if they also win the whole game
         checkBigWin(xBoard, yBoard, mark);
     }
 }
 
-// Check for a winner of the whole game!
+//Check for a winner of the whole game!
 function checkBigWin(xBoard, yBoard, mark) {
    // Check row
     var rowWin = true;
@@ -168,7 +181,7 @@ function checkBigWin(xBoard, yBoard, mark) {
             break;
         }
     }
-    // Check column
+    //Check column
     var colWin = true;
     for (var i = 0; i<3; i++) {
         if (theGame.boards[i][yBoard] != mark) {
@@ -177,7 +190,7 @@ function checkBigWin(xBoard, yBoard, mark) {
         }
     }
 
-    // Check Diags
+    //Check Diags
     var diagWin = false;
     if (theGame.boards[0][0].winner == mark && theGame.boards[1][1].winner == mark && theGame.boards[2][2].winner == mark) {
         diagWin = true;
@@ -186,7 +199,7 @@ function checkBigWin(xBoard, yBoard, mark) {
         diagWin = true;
     }
 
-    // Winner?
+    //Winner?
     if (diagWin || colWin || rowWin){
         theGame.turn = 4;
     }
