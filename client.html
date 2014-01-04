@@ -3,23 +3,140 @@
 <html>
 <head>
     <meta charset="UTF-8" />
+    <link type="text/css" rel="stylesheet" href="stylesheet.css" />
     <title>Ultimate Tic-Tac-Toe!</title>
-
-    
 </head>
 
 <body>
-    
-    <div style="text-align:center;">
-        <canvas id="canvas" width="500" height="500" onclick="clicky(event)">
-         Your browser does not support HTML5 Canvas. :(
-        </canvas>
-        <div id="status"></div>
-    </div>
-
 
     <script src="/socket.io/socket.io.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="game.js"></script>
+    <div id='main'>
+        <div id='canvasDiv' class="gameArea hidden">
+            <canvas id="canvas" width="680" height="680">
+             Your browser does not support HTML5 Canvas. :(
+            </canvas>
+        </div>
+        <div id="welcome" class="gameArea">
+            <div>
+                <h3>Welcome to<h3>
+                <h1>Ultimate Tic-Tac-Toe!</h1>
+            </div>
+            <div id='submitLogin'>
+                <p>Please login to join the lobby and find an opponent.</p>
+                <form id='formSubmitName'>
+                    Name: <input type="text" name="name" id='nameBox'/>
+                    <div id="nameSubmit" class='button'>Submit</div>
+                </form>
+            </div>
+            <div id='lobby' class='hidden'>
+                <p>
+                    You are now waiting in the lobby.<br/>When another player is available, you will be able to join a game.
+                </p>
+            </div>
+        </div>
 
+        <div id="promptStart" class='hidden popup'>
+            <span id='topSpan'>
+                <p>
+                    Click 'Accept' to start the game or 'Reject' to return to the lobby.
+                </p>
+                <div>
+                    <span id='acceptStart' class='button'>Accept</span>
+                    <span id='rejectStart' class='button'>Reject</span>
+                </div>      
+            </span>
+        </div>
+
+        <div id="promptStartWait" class='hidden popup'>
+            <span>    
+            </span>
+        </div>
+
+        <div id="promptStartRejected" class='hidden popup'>
+            <span>
+                <h2>Sorry, the game was not accepted.</h2>
+                <div id='closeReject' class='button'>Ok</div>    
+            </span>
+        </div>
+
+        <div id="disconnect" class='hidden popup'>
+            <span>
+                <h2>Your opponent has disconnected!</h2>
+                <p>
+                    To resume the game, first start a new game
+                    with the same opponent, then use the load feature and enter your game ID.
+                </p>
+                <div>
+                    <button id='disconLobby'>Return to Lobby</button>
+                </div>      
+            </span>
+        </div>
+
+        <div id="gameOver" class='hidden popup'>
+            <div>
+                <h2>Game Over!</h2>
+            </div>
+            <div id='winnerText'>
+            </div>
+                <div>
+                    <button id='gameOverLobby'>Return to Lobby</button>
+                </div>      
+            </div>
+        </div>
+
+        <div id='helpScreen' class='hidden'>
+            <div>
+                <h2>Help!</h2>
+            </div>
+            <div>
+                <h3>Question</h3>
+                <p>
+                    Answer to question goes here!
+                </p>
+            </div>
+            <div id='helpClose' class='button'>Close</div>
+        </div>  
+
+        <div id='optionsMenu' class='hidden'>
+            <ul>
+                <li id='menuHelp'>Help</li>
+            </ul>
+        </div>      
+
+        <div id='side'>
+            <div id='menuBar'>
+                <span id='optionsBar' class='button'>Menu</span>
+            </div>
+
+            <div id='statusTitle'>Game Status</div>
+            <div id="status">
+                <ul>
+                </ul>
+            </div>
+
+            <div class='container'>
+                <div class='list'>
+                    <ul>
+                        <li>Players in Queue:</li>
+                        <li> </li>
+                        <li>Players in Game:</li>
+                    </ul>
+                </div>
+                <div id='startGameContainer'>
+                    <div id='startGame' class='hidden button'>Start Game</div>
+                </div>
+            </div>
+        </div>
+        <div id='spacer'></div>
+        <div id='bottom'>
+            <button id='test'>Toggle</button>
+            <button id='test2'>Show Overlay</button>
+        </div>
+    </div>
+
+    
+   
 </body>
 </html>
