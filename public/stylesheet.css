@@ -1,0 +1,239 @@
+/**
+* {
+	border: 1px dashed black;
+}
+**/
+
+canvas {
+	float: left;
+	border-radius: 20px;
+	margin: 10px;
+	box-shadow: 5px 5px 5px #888888;
+	border: 1px solid black;
+	background-color: white;
+}
+
+div {
+	text-align: center;
+}
+
+#main {
+	width: 1020px;
+	height: 800px;
+	display: inline-block;
+}
+
+#canvasDiv {
+	width: 700px;
+	height: 700px;
+	float: left;
+}
+
+#welcome {
+	width: 700px;
+	height: 700px;
+	float: left;
+	position: relative;
+}
+
+#side {
+	margin: 0px 0px 0px 10px;
+	width: 300px;
+	height: 700px;
+	position: absolute;
+	top: 10px;
+	left: 710px;
+}
+
+#status {
+	height: 250px;
+	border: 1px solid black;
+	margin: 1px;
+	padding: 5px 10px 10px 10px;
+	border-radius: 10px;
+	box-shadow: 5px 5px 5px #888888;
+	text-align: left;
+	overflow: auto;
+	color: #888888;
+	position: relative;
+	top: 0px;
+	left: 0px;
+}
+
+.statusTop {
+	color: black;
+	font-size: 20px;
+	padding: 0px 0px 10px 0px;
+}
+
+.container {
+	text-align: center;
+	width: 300px;
+	padding: 20px 0px 0px 0px;
+}
+
+.list {
+	margin: 0 auto;
+	width: 200px;
+	border: 1px solid black;
+	border-radius: 2px;
+}
+
+.list ul li {
+	height: 20px;
+	font-size: 16px;
+}
+
+#startGameContainer {
+	position: absolute;
+	width: 300px;
+	left: 0px;
+	top: 650px;
+	text-align: center;
+}
+
+#startGame {
+	width: 80px;
+	margin: 0 auto;
+}
+
+.popup {
+	border: 3px solid red;
+	border-radius: 5px;
+	box-shadow: 5px 5px 5px #888888;
+	position: absolute;
+	background-color: white;
+	top: 250px;
+	left: 150px;
+	width: 400px;
+	height: 200px;
+	z-index: 10;
+}
+
+#helpScreen {
+	border: 3px solid red;
+	border-radius: 5px;
+	box-shadow: 5px 5px 5px #888888;
+	position: absolute;
+	background-color: white;
+	top: 150px;
+	left: 150px;
+	width: 400px;
+	height: 400px;
+	z-index: 10;
+}
+
+#helpScreen h3, #helpScreen p {
+	text-align: left;
+	padding: 0px 0px 0px 10px;
+}
+
+#helpClose {
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+}
+
+#statusTitle {
+	position: relative;
+}
+
+#menuBar {
+	height: 25px;
+}
+
+.turn {
+	text-align: left;
+	position: relative;
+	float: left;
+	width: 200px;
+	left: 0px;
+	top: 2.5px;
+}
+
+#optionsBar {
+	position: relative;
+	float: right;
+	width: 50px;
+	top: 2.5px;
+}
+
+#optionsMenu {
+	border: 1px solid black;
+	position: absolute;
+	left: 918px;
+	top: 32px;
+	width: 100px;
+	z-index: 10;
+	background-color: white;
+}
+
+#optionsMenu ul li:hover {
+	background-color: #cccccc;
+}
+
+#bottom {
+	width: 1020px;
+	height: 60px;
+	clear: both;
+}
+
+#spacer {
+	width: 1020px;
+	height: 20px;
+	clear: both;
+}
+
+h1 {
+	font-size: 50px;
+	margin-top: 0px;
+}
+
+p {
+	
+}
+
+ul {
+	list-style: none;
+	padding: 0px;
+	margin: 0px;
+}
+
+li {
+	padding: 1px;
+	margin: 1px;
+	cursor: default;
+}
+
+.available:hover {
+	background-color: #CCCCCC;
+}
+
+.pLbC {
+	background-color: #CCCCCC;
+}
+
+.hidden {
+	display: none;
+}
+
+#lobby {
+
+}
+
+#formSubmitName {
+	display: inline;
+}
+
+#nameSubmit {
+	width: 50px;
+	display: inline;
+}
+
+.button {
+	border: 1px solid black;
+	border-radius: 4px;
+	padding: 1px 4px 1px 4px;
+	box-shadow: 2px 2px 2px #cccccc;
+	cursor: pointer;
+}
