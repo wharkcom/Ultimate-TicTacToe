@@ -62,7 +62,7 @@ div {
 
 .statusTop {
 	color: black;
-	font-size: 20px;
+	font-size: 17px;
 	padding: 0px 0px 10px 0px;
 }
 
@@ -76,7 +76,9 @@ div {
 	margin: 0 auto;
 	width: 200px;
 	border: 1px solid black;
-	border-radius: 2px;
+	/**border-radius: 2px;**/
+	border-radius: 10px;
+	box-shadow: 5px 5px 5px #888888;
 }
 
 .list ul li {
@@ -103,6 +105,7 @@ div {
 	box-shadow: 5px 5px 5px #888888;
 	position: absolute;
 	background-color: white;
+	padding: 0px 10px 0px 10px;
 	top: 250px;
 	left: 150px;
 	width: 400px;
@@ -121,6 +124,8 @@ div {
 	width: 400px;
 	height: 400px;
 	z-index: 10;
+	overflow: auto;
+	font-size: 0.75em;
 }
 
 #helpScreen h3, #helpScreen p {
@@ -132,6 +137,15 @@ div {
 	position: absolute;
 	bottom: 10px;
 	right: 10px;
+}
+
+#promptStartWait, #promptStartRejected {
+	height: 100px;
+}
+
+#closeReject {
+	margin: 0 auto;
+	width: 50px;
 }
 
 #statusTitle {

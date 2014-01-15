@@ -21,7 +21,9 @@ function init() {
     //window.addEventListener('resize', resizeGame, false);
     //resizeGame();
 
+    //-----------------------------------------------------------
 	//Socket.io functions to handle communication with the server
+    //-----------------------------------------------------------
     iosocket = io.connect();
 
     iosocket.on('connect', function() {
@@ -40,6 +42,10 @@ function init() {
         iosocket.on('message', function(msg) {
             updateStatus(msg);
         });
+
+        //------------------------------
+        //Popups when initiating a game
+        //------------------------------
 
         iosocket.on('promptStart', function(name){
             promptStart(name);
@@ -67,6 +73,25 @@ function init() {
             });
         });
 
+        //Shows or hides the start button to prevent starting a game at the wrong time
+        iosocket.on('toggleStartButton', function() {
+            $('#startGame').toggleClass('hidden');
+        });
+
+        //------------------------------
+        //Game Started
+        //------------------------------
+
+        //Passes node room info to the client, starts a new game.
+        iosocket.on('passRoom', function(data) {
+            theGame = new GameState();
+            theGame.room = data.room;
+            console.log('passRoom received');
+            console.log(theGame);
+            $('#menuLoad').removeClass('hidden');
+            drawBoard();
+        });
+
         iosocket.on('newTurn', function(data) {
             theGame.turn = data.turn;
             theGame.activeX = data.activeX;
@@ -79,18 +104,6 @@ function init() {
         iosocket.on('move', function(move) {
             theGame.boards[move.xBoard][move.yBoard].state[move.xLoc][move.yLoc] = move.mark;
             drawBoard();
-        });
-
-        iosocket.on('passRoom', function(data) {
-            theGame = new GameState();
-            theGame.room = data.room;
-            console.log('passRoom received');
-            console.log(theGame);
-            drawBoard();
-        });
-
-        iosocket.on('toggleStartButton', function() {
-            $('#startGame').toggleClass('hidden');
         });
 
         iosocket.on('littleWin', function(win) {
@@ -122,6 +135,7 @@ function init() {
         });
 
         iosocket.on('opponentDisconnect', function(){
+            $('#menuLoad').addClass('hidden');
             disconnectAlert();
         });
 
@@ -428,8 +442,9 @@ function login() {
     }
 }
 
+
+//Handles various button clicks, can probably clean up later
 function buttonTests() {
-    //$('#canvas').click(clicky(event));
     $('#canvas').on('click', clicky);
     $('#test').click(toggleBoard);
     $('#test2').click(promptStart);
@@ -460,6 +475,10 @@ function buttonTests() {
         $('#helpScreen').toggleClass('hidden');
     });
 
+    $('#menuLoad').click(function(){
+        loadGame();
+    });
+
     $('#helpClose').click(function(){
         $('#helpScreen').toggleClass('hidden');
     });
@@ -472,6 +491,7 @@ function buttonTests() {
     }
 }
 
+//Prompt when game is initiated
 function promptStart(name) {
     $('#promptStart #topSpan').prepend('<h2>'+name+' would like to start a game with you!</h2>');
     $('#promptStart').toggleClass('hidden');
@@ -494,6 +514,7 @@ function promptStart(name) {
     }
 }
 
+//Alert when your opponent has disconnected
 function disconnectAlert() {
     $('#disconnect').toggleClass('hidden');
     theGame.turn = 3; //Can no longer play
@@ -506,6 +527,7 @@ function loadGame() {
     iosocket.emit('loadGame', {room: theGame.room, saveID: saveID});
 }
 
+//Show or hide the game board
 function toggleBoard() {
     $('.gameArea').toggleClass('hidden');
 }

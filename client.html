@@ -12,12 +12,17 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="game.js"></script>
+
     <div id='main'>
+
+    <!-- Game Board -->
         <div id='canvasDiv' class="gameArea hidden">
             <canvas id="canvas" width="680" height="680">
              Your browser does not support HTML5 Canvas. :(
             </canvas>
         </div>
+
+    <!-- Welcome Screen -->
         <div id="welcome" class="gameArea">
             <div>
                 <h3>Welcome to<h3>
@@ -37,6 +42,7 @@
             </div>
         </div>
 
+    <!-- Popups -->
         <div id="promptStart" class='hidden popup'>
             <span id='topSpan'>
                 <p>
@@ -91,20 +97,37 @@
                 <h2>Help!</h2>
             </div>
             <div>
-                <h3>Question</h3>
+                <h3>How do I start a game?</h3>
                 <p>
-                    Answer to question goes here!
+                    You need two players to start a game. If you want to play alone, you can open a second browser window and log in again.
+                </p>
+                <p>
+                    Once there are at least two players, select your opponent's name from the queue and click 'Start Game'. When your opponent confirms, the game will begin.
+                </p>
+                <h3>What are the rules?</h3>
+                <p>
+                    The rules are very similar to normal tic-tac-toe. The only difference is that your opponent's next move is restricted to the large square that corresponds to the small square in which you just played.
+                </p>
+                <p>
+                    If the next move will be in a square that has been won, the player may instead play in any open square.
+                </p>
+                <h3>I have other questions!</h3>
+                <p>
+                    More help coming soon!
                 </p>
             </div>
             <div id='helpClose' class='button'>Close</div>
         </div>  
 
+    <!-- Options Menu -->
         <div id='optionsMenu' class='hidden'>
             <ul>
+                <li id='menuLoad' class='hidden'>Load Game</li>
                 <li id='menuHelp'>Help</li>
             </ul>
         </div>      
 
+    <!-- Side Menu -->
         <div id='side'>
             <div id='menuBar'>
                 <span id='optionsBar' class='button'>Menu</span>
@@ -129,11 +152,14 @@
                 </div>
             </div>
         </div>
+
+    <!-- Some extra buttons to use during testing
         <div id='spacer'></div>
         <div id='bottom'>
             <button id='test'>Toggle</button>
             <button id='test2'>Show Overlay</button>
         </div>
+    -->
     </div>
 
     
